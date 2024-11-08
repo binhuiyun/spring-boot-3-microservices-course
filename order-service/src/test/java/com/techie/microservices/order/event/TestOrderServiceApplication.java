@@ -1,5 +1,6 @@
-package com.techie.microservices.order;
+package com.techie.microservices.order.event;
 
+import com.techie.microservices.order.OrderServiceApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;

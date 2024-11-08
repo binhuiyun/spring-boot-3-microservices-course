@@ -1,4 +1,4 @@
-package com.techie.microservices.notification.order;
+package com.techie.microservices.order.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
