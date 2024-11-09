@@ -1,6 +1,5 @@
 package com.techie.microservices.notification.service;
 
-import com.techie.microservices.order.event.OrderPlacedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -16,25 +15,25 @@ import org.springframework.stereotype.Service;
 public class NotificationService {
 
     private final JavaMailSender javaMailSender;
-    private final org.springframework.kafka.core.KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
-    @KafkaListener(topics = "order-placed", groupId = "notification-service")
-    public void listen(OrderPlacedEvent orderPlacedEvent){
+   // private final org.springframework.kafka.core.KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
+    @KafkaListener(topics = "order-placed")
+    public void listen(com.techie.microservices.order.event.OrderPlacedEvent orderPlacedEvent){
         log.info("Got Message from order-placed topic {}", orderPlacedEvent);
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom("binhuiyun@gmail.com");
-            messageHelper.setTo(orderPlacedEvent.getEmail());
+            messageHelper.setTo(orderPlacedEvent.getEmail().toString());
             messageHelper.setSubject(String.format("Your Order with OrderNumber %s is placed successfully", orderPlacedEvent.getOrderNumber()));
             messageHelper.setText(String.format("""
-                            Hi,
+                            Hi,%s %s
 
                             Your order with order number %s is now placed successfully.
 
                             Best Regards
                             Spring Shop
                             """,
-//                    orderPlacedEvent.getFirstName().toString(),
-//                    orderPlacedEvent.getLastName().toString(),
+                   orderPlacedEvent.getFirstName().toString(),
+                    orderPlacedEvent.getLastName().toString(),
                     orderPlacedEvent.getOrderNumber()));
         };
         try {
